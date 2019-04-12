@@ -9,7 +9,7 @@ public class TableTest {
 
     private int number;
 
-    private Name.Table table;
+    private Table table;
 
 
     @Given("^У стола есть номер (\\d+)$")
@@ -19,7 +19,7 @@ public class TableTest {
 
     @When("^Мы создаем стол с данным номером$")
     public void мыСоздаемСтолСДаннымНомером() {
-        this.table = new Name.Table(number);
+        this.table = new Table(number);
     }
 
 
