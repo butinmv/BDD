@@ -11,9 +11,8 @@ import static org.junit.Assert.assertEquals;
 
 public class OrderTest {
 
-    private Table table = new Table(3);
+    private Table table;
     private Map<Product, Integer> products = new HashMap<>();
-    private int sum = 0;
 
     private Product coffee = new Product(150, "Кофе");
     private Product cesar = new Product(300, "Цезарь");
@@ -23,43 +22,43 @@ public class OrderTest {
 
     @Given("^У заказа есть номер столика (\\d+)$")
     public void уЗаказаЕстьНомерСтолика(int arg0) {
+        this.table = new Table(3);
         assertEquals(arg0, table.getNumber());
     }
 
-
-    @Given("^В заказ можно добавлять продукт$")
-    public void вЗаказМожноДобавлятьПродукт() {
-        products.put(coffee, 2);
-        products.put(cesar, 1);
+    @When("^Мы создаем заказ с данным столиком$")
+    public void мыСоздаемЗаказСДаннымСтоликом() {
+        this.order = new Order(table);
     }
 
-    @Given("^У заказа есть общая сумма заказа равная (\\d+) рублям$")
+    @Then("^В заказ можно добавить продукт кофе$")
+    public void вЗаказМожноДобавитьПродуктКофе() {
+        order.addProduct(coffee, 2);
+    }
+
+    @And("^В заказ можно добавить продукт цезарь$")
+    public void вЗаказМожноДобавитьПродуктЦезарь() {
+        order.addProduct(cesar, 1);
+    }
+
+    @And("^У заказа есть общая сумма заказа равная (\\d+) рублям$")
     public void уЗаказаЕстьОбщаяСуммаЗаказаРавнаяРублям(int arg0) {
-        assertEquals(arg0, this.sum);
+        assertEquals(arg0, order.sumTotal());
     }
 
-    @When("^Мы создаем заказ с данным столиком и продуктами$")
-    public void мыСоздаемЗаказСДаннымСтоликомИПродуктами() {
-        this.order = new OrderTest(table);
-    }
-
-    @Then("^Мы можем узнать номер столика заказа равному (\\d+)$")
+    @And("^Мы можем узнать номер столика заказа равному (\\d+)$")
     public void мыМожемУзнатьНомерСтоликаЗаказаРавному(int arg0) {
         assertEquals(arg0, table.getNumber());
     }
 
-    @And("^Мы можем узнать товары которые есть в этом заказе$")
-    public void мыМожемУзнатьТоварыКоторыеЕстьВЭтомЗаказе() {
-        for (Map.Entry<Product, Integer> entry: products.entrySet()) {
-            assertEquals(entry.getKey(), coffee);
-            assertEquals(entry.getKey(), cesar);
-        }
-    }
 
     @And("^Мы можем узнать сумму заказа равную (\\d+) рублям$")
     public void мыМожемУзнатьСуммуЗаказаРавнуюРублям(int arg0) {
-        for (Map.Entry<Product, Integer> entry: products.entrySet()) {
-            this.sum += entry.getKey().getPrice() * entry.getValue();
-        }
+        assertEquals(arg0, order.sumTotal());
+    }
+
+    @And("^Мы можем узнать количесвто (\\d+) продуктов которые есть в этом заказе$")
+    public void мыМожемУзнатьКоличесвтоПродуктовКоторыеЕстьВЭтомЗаказе(int arg0) {
+        assertEquals(arg0, order.getProducts().size());
     }
 }
