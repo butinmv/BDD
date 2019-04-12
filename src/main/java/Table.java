@@ -1,10 +1,12 @@
 public class Table {
 
-    public Table(int number) {
+    private int number;
 
+    public Table(int number) {
+        this.number = number;
     }
 
     public int getNumber() {
-        return 0;
+        return this.number;
     }
 }
